@@ -14,7 +14,7 @@ import json
 from tools_setup import my_brand
 from math import sqrt
 
-from triangle import classifyTriangle
+from triangle import classify_triangle
 
 r = open('repos.json')
 
@@ -56,7 +56,6 @@ class TestReposAndCommits(unittest.TestCase):
         self.assertEqual(repos[0].get('name'), 'csp')
         self.assertEqual(repos[1].get('name'), 'hellogitworld')
         call = 'https://api.github.com/repos/richkempinski/' + repos[1].get('name') + '/commits'
-        print(call)
         commits = server.fetch_json(call)
         self.assertEqual(len(commits), 30)
 
@@ -67,22 +66,28 @@ class TestReposAndCommits(unittest.TestCase):
 class TestTriangles(unittest.TestCase):
     # define multiple sets of tests as functions with names that begin
     # with 'test'.  Each function may include multiple tests
+    def testInvalidInput(self):
+        self.assertEqual(classify_triangle(201, 201, 201), 'InvalidInput')
+        self.assertEqual(classify_triangle(-3,-4,-5), 'InvalidInput')
+        self.assertEqual(classify_triangle(20.1, 20.1, 20.1), 'InvalidInput')
+        self.assertEqual(classify_triangle(3, 5, 8), 'NotATriangle')
+
     def testSetEquil(self): # test invalid inputs
-        self.assertEqual(classifyTriangle(1,1,1),'Equilateral')
-        self.assertNotEqual(classifyTriangle(15,34,32), 'Equilateral')
-        self.assertNotEqual(classifyTriangle(5,5,4), 'Equilateral')
-        self.assertNotEqual(classifyTriangle(3,4,5), 'Equilateral')
+        self.assertEqual(classify_triangle(1,1,1),'Equilateral')
+        self.assertNotEqual(classify_triangle(15,34,32), 'Equilateral')
+        self.assertNotEqual(classify_triangle(5,5,4), 'Equilateral')
+        self.assertNotEqual(classify_triangle(3,4,5), 'Equilateral')
 
     # Right will take proirity over scalene
     def testSetScale(self):
-        self.assertEqual(classifyTriangle(15,32,34), 'Scalene')
-        self.assertNotEqual(classifyTriangle(1,1,1), 'Scalene')
-        self.assertNotEqual(classifyTriangle(3,4,5), 'Scalene')
+        self.assertEqual(classify_triangle(15,32,34), 'Scalene')
+        self.assertNotEqual(classify_triangle(1,1,1), 'Scalene')
+        self.assertNotEqual(classify_triangle(3,4,5), 'Scalene')
 
     # Isosceles will take proirity over right triangle
     def testSetRight(self):
-        self.assertEqual(classifyTriangle(3,4,5), 'Right')
-        self.assertNotEqual(classifyTriangle(1,1,sqrt(2)), 'Right')
+        self.assertEqual(classify_triangle(3,4,5), 'Right')
+        self.assertNotEqual(classify_triangle(1,1,sqrt(2)), 'Right')
 
 if __name__ == '__main__':
     my_brand("HW 01: Testing Triangle Classification")
