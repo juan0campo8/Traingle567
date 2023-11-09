@@ -16,12 +16,12 @@ from math import sqrt
 
 from triangle import classify_triangle
 
-r = open('repos.json')
+r = open('Traingle567/repos.json')
 
 repos = json.load(r)
 print(repos[0].get('name'))
 
-c = open('commits.json')
+c = open('Traingle567\commits.json')
 
 commits = json.load(c)
 print(len(commits))
@@ -67,13 +67,18 @@ class TestTriangles(unittest.TestCase):
     # define multiple sets of tests as functions with names that begin
     # with 'test'.  Each function may include multiple tests
     def testInvalidInput(self):
-        self.assertEqual(classify_triangle(201, 201, 201), 'InvalidInput')
-        self.assertEqual(classify_triangle(-3,-4,-5), 'InvalidInput')
-        self.assertEqual(classify_triangle(20.1, 20.1, 20.1), 'InvalidInput')
+        self.assertEqual(classify_triangle(201, 200, 20), 'InvalidInput')
+        self.assertEqual(classify_triangle(-3,-4, 5), 'InvalidInput')
+        self.assertEqual(classify_triangle(0, 0, 0), 'InvalidInput')
+        self.assertEqual(classify_triangle(20.1, 20.1, 20), 'InvalidInput')
         self.assertEqual(classify_triangle(3, 5, 8), 'NotATriangle')
+        self.assertEqual(classify_triangle(3,3,8), 'NotATriangle')
+        self.assertEqual(classify_triangle(6,3,3), 'NotATriangle')
+        self.assertEqual(classify_triangle(3,6,3), 'NotATriangle')
 
     def testSetEquil(self): # test invalid inputs
         self.assertEqual(classify_triangle(1,1,1),'Equilateral')
+        self.assertEqual(classify_triangle(200,200,200), 'Equilateral')
         self.assertNotEqual(classify_triangle(15,34,32), 'Equilateral')
         self.assertNotEqual(classify_triangle(5,5,4), 'Equilateral')
         self.assertNotEqual(classify_triangle(3,4,5), 'Equilateral')
@@ -85,6 +90,9 @@ class TestTriangles(unittest.TestCase):
         self.assertNotEqual(classify_triangle(3,4,5), 'Scalene')
 
     # Isosceles will take proirity over right triangle
+    def testSetIso(self):
+        self.assertEqual(classify_triangle(2,2,3), 'Isoceles')
+
     def testSetRight(self):
         self.assertEqual(classify_triangle(3,4,5), 'Right')
         self.assertNotEqual(classify_triangle(1,1,sqrt(2)), 'Right')
